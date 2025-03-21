@@ -1,13 +1,13 @@
 locals {
-  region                               = "us-east-2"
+  region                               = "ap-south-1"
   kms_deletion_window_in_days          = 7
   kms_key_rotation_enabled             = true
   is_enabled                           = true
   multi_region                         = false
-  environment                          = "stage"
-  name                                 = "sqops"
+  environment                          = "testing"
+  name                                 = "razor"
   auto_assign_public_ip                = true
-  vpc_availability_zones               = ["us-east-2a", "us-east-2b"]
+  vpc_availability_zones               = ["ap-south-1a", "ap-south-1b"]
   vpc_public_subnet_enabled            = true
   vpc_private_subnet_enabled           = true
   vpc_database_subnet_enabled          = true
@@ -26,7 +26,7 @@ locals {
   cluster_endpoint_public_access       = true
   cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]
   ebs_volume_size                      = 50
-  fargate_profile_name                 = "app"
+  fargate_profile_name                 = "app-fargate"
   vpc_s3_endpoint_enabled              = false
   vpc_ecr_endpoint_enabled             = false
   vpc_public_subnets_counts            = 2
@@ -232,10 +232,10 @@ module "fargate_profle" {
   source               = "squareops/eks/aws//modules/fargate-profile"
   depends_on           = [module.vpc, module.eks]
   fargate_profile_name = local.fargate_profile_name
-  fargate_subnet_ids   = [module.vpc.vpc_private_subnets[0]]
+  fargate_subnet_ids   = [module.vpc.private_subnets[0]]
   environment          = local.environment
-  eks_cluster_name     = module.eks.eks_cluster_name
-  fargate_namespace    = "fargate"
+  eks_cluster_name     = module.eks.cluster_name
+  fargate_namespace    = "app"
   k8s_labels = {
     "App-Services" = "app"
   }
