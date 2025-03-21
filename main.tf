@@ -1,7 +1,7 @@
 module "eks" {
   count                     = var.default_addon_enabled ? 0 : 1
   source                    = "terraform-aws-modules/eks/aws"
-  version                   = "20.16.0"
+  version                   = "20.34.0"
   vpc_id                    = var.vpc_id
   subnet_ids                = var.vpc_private_subnet_ids
   enable_irsa               = var.irsa_enabled
